@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template/content.xhtml">
+	<ui:define name="content">
+		<h:form id="form">
+	        <p:growl id="messages" />
+	 
+	        <p:panelGrid columns="2">
+	            <f:facet name="header">  
+	                Cadastrar nova Pessoa
+	             </f:facet>
+	 
+	            <h:outputText value="Nome: " />
+	            <p:inputText value="#{pessoaFormMB.pessoa.name}" />
+	            <h:outputText value="CPF: " />
+	            <p:inputText value="#{pessoaFormMB.pessoa.cpf}" />
+	 
+	            <p:commandButton value="Salvar" action="#{pessoaFormMB.insert}" update=":form" />
+	        </p:panelGrid>
+	    </h:form>
+	</ui:define>
+</ui:composition>
+</html>
