@@ -2,8 +2,8 @@ package br.com.alexradavelli.javaeejsf.managedbean;
 
 import java.util.Objects;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -11,11 +11,17 @@ import br.com.alexradavelli.javaeejsf.dto.PessoaDTO;
 import br.com.alexradavelli.javaeejsf.service.PessoaService;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class PessoaFormMB extends AbstractMB {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1881914658287676575L;
 
 	private final PessoaService pessoaService;
 	
+	private Long id;
 	private PessoaDTO pessoa;
 
 	@Inject
@@ -23,17 +29,19 @@ public class PessoaFormMB extends AbstractMB {
 		this.pessoaService = pessoaService;
 	}
 	
-	@PostConstruct
-	private void init() {
-		if (isUpdate()) {
-			loadToUpdate();
-		} else {
+	public void init() {
+		if (FacesContext.getCurrentInstance().isPostback()) {
+			return;
+		}
+		if (Objects.isNull(id)) {
 			createToInsert();
+		} else {
+			prepareToUpdate();
 		}
 	}
-
-	private void loadToUpdate() {
-		pessoa = pessoaService.findById(pessoa.getId())
+	
+	private void prepareToUpdate() {
+		pessoa = pessoaService.findById(id)
 				.map(PessoaDTO::parseDTO)
 				.orElseThrow(() -> new RuntimeException("Pessoa não encontrada para alteração"));
 	}
@@ -42,22 +50,17 @@ public class PessoaFormMB extends AbstractMB {
 		pessoa = PessoaDTO.create();
 	}
 
-	private boolean isUpdate() {
-		return Objects.nonNull(pessoa) && Objects.nonNull(pessoa.getId());
-	}
-	
-	public void insert() {
-		pessoaService.insert(pessoa.toEntity());
-		createToInsert();
+	public void save() {
+		pessoaService.save(pessoa.toEntity());
 		addInfoMessage("Pessoa salva com sucesso!");
 	}
 	
-	public void update() {
-		pessoa = PessoaDTO.parseDTO(pessoaService.update(pessoa.toEntity()));
+	public Long getId() {
+		return id;
 	}
 	
-	public void remove() {
-		pessoaService.remove(pessoa.toEntity());
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public PessoaDTO getPessoa() {

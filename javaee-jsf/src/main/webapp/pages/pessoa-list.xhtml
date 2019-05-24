@@ -6,17 +6,18 @@
 
 <ui:composition template="/template/content.xhtml">
 	<ui:define name="content">
+		
 		<h:form id="form">
 	        <p:growl id="messages" />
 	        
-	        <p:button value="Incluir" icon="ui-icon-close" outcome="pessoa-form.xhtml" />
+	        <p:button value="Incluir" outcome="pessoa-form.xhtml" />
 	 
-	        <p:dataTable editable="true" id="tabelaAssociados" value="#{pessoaListMB.pessoas}" var="pessoa">
+	        <p:dataTable editable="true" id="tabelaPessoas" value="#{pessoaListMB.pessoas}" var="pessoa">
 	            <p:column headerText="ID" style="width:5%">
 		            <h:outputText value="#{pessoa.id}" />
 	            </p:column>
 	 
-	            <p:column headerText="Nome" style="width:50%">
+	            <p:column headerText="Nome" style="width:60%">
 		            <h:outputText value="#{pessoa.name}" />
 	            </p:column>
 	            
@@ -24,10 +25,12 @@
 		            <h:outputText value="#{pessoa.cpf}" />
 	            </p:column>
 	 
-	            <p:column>
-	                <p:commandButton icon="ui-icon-close" outcome="pessoa-form.xhtml">
-	                    <f:setPropertyActionListener target="#{pessoaFormMB.pessoa}" value="#{pessoa}" />
-	                </p:commandButton>
+	            <p:column style="width:5%">
+	                <p:button icon="ui-icon-pencil" outcome="pessoa-form.xhtml">
+	                	<f:param name="id" value="#{pessoa.id}" />
+	                </p:button>
+	                <p:commandButton icon="ui-icon-close" action="#{pessoaListMB.remove(pessoa)}"
+	                	update="@form"/>
 	            </p:column>
 	        </p:dataTable>
     	</h:form>

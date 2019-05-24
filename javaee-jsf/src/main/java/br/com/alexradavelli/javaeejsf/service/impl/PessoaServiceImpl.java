@@ -2,6 +2,7 @@ package br.com.alexradavelli.javaeejsf.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,20 +34,19 @@ public class PessoaServiceImpl implements PessoaService {
 				.stream()
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
-
+	
 	@Override
-	public PessoaEntity insert(PessoaEntity pessoaEntity) {
-		return repository.insert(pessoaEntity);
-	}
-
-	@Override
-	public PessoaEntity update(PessoaEntity pessoaEntity) {
-		return repository.update(pessoaEntity);
+	public PessoaEntity save(PessoaEntity pessoaEntity) {
+		if (Objects.isNull(pessoaEntity.getId())) {
+			return repository.insert(pessoaEntity);
+		} else {
+			return repository.update(pessoaEntity);
+		}
 	}
 
 	@Override
 	public void remove(PessoaEntity pessoaEntity) {
-		repository.remove(pessoaEntity);
+		repository.remove(findById(pessoaEntity.getId()).get());
 	}
 
 }

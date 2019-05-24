@@ -11,9 +11,7 @@ public interface PessoaService {
 
 	List<PessoaEntity> findAll();
 
-	PessoaEntity insert(PessoaEntity pessoaEntity);
-	 
-	PessoaEntity update(PessoaEntity pessoaEntity);
+	PessoaEntity save(PessoaEntity pessoaEntity);
  
     void remove(PessoaEntity pessoaEntity);
 
